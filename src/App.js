@@ -7,6 +7,8 @@ import Master from "./layouts/Master/Master";
 import UserList from "./components/Users/User-List/UserList";
 import UserAdd from "./components/Users/User-Add/UserAdd";
 import UserEdit from "./components/Users/User-Edit/UserEdit";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
 
             <Route path="*" element={<h1>Page not found</h1>}/>
         </Routes>
+        <ToastContainer />
     </>
   );
 }

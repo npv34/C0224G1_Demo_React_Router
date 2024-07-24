@@ -2,7 +2,11 @@ import "./Login.css";
 import {Link, useNavigate} from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from 'yup';
-
+import {Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField} from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {useState} from "react";
+import {toast} from "react-toastify";
 
 const loginSchema = Yup.object().shape({
     email: Yup.string()
@@ -15,6 +19,8 @@ const loginSchema = Yup.object().shape({
 function Login(props) {
 
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
 
     const loginForm = useFormik({
         initialValues: {
@@ -30,11 +36,18 @@ function Login(props) {
                 // dieu huog router
                 navigate("/admin/users")
             } else {
-                alert("Tai khoan hoac mat khau khong dung");
+                toast.error("Tai khoan hoac mat khau khong dung!");
                 return; // stop form submit
             }
         }
     })
+
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     return (
         <>
@@ -42,24 +55,54 @@ function Login(props) {
                 <div className="form-signin text-center mt-5">
                     <form onSubmit={loginForm.handleSubmit}>
                         <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-                        <div className="form-floating">
-                            <input type="email" name={"email"} onChange={loginForm.handleChange} className="form-control" id="floatingInput"
-                                   placeholder="name@example.com"/>
-                            <label htmlFor="floatingInput">Email address</label>
-                            { loginForm.errors.email ? <small className={"text-danger"}>{loginForm.errors.email}</small> : null}
+                        <div className="mb-2">
+                            <TextField
+                                fullWidth
+                                required
+                                name={"email"}
+                                id="outlined-required"
+                                label="Email"
+                                error={!!loginForm.errors.email}
+                                onChange={loginForm.handleChange}
+                                helperText={loginForm.errors.email}
+                            />
                         </div>
-                        <div className="form-floating">
-                            <input type="password" name={"password"} onChange={loginForm.handleChange} className="form-control" id="floatingPassword"
-                                   placeholder="Password"/>
-                            <label htmlFor="floatingPassword">Password</label>
+                        <div className="mb-2">
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                                <OutlinedInput
+
+                                    id="outlined-adornment-password"
+                                    name={"password"}
+                                    onChange={loginForm.handleChange}
+                                    type={showPassword ? 'text' : 'password'}
+                                    error={!!loginForm.errors.password}
+                                    helperText={loginForm.errors.password}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={handleClickShowPassword}
+                                                onMouseDown={handleMouseDownPassword}
+                                                edge="end"
+                                            >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password"
+                                />
+                            </FormControl>
                         </div>
 
-                        <div className="checkbox mb-3">
+                        <div className="checkbox mb-2">
                             <label>
                                 <input type="checkbox" name={"rememberMe"} onChange={loginForm.handleChange} value="remember-me"/> Remember me
                             </label>
                         </div>
-                        <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                        <div className="mb-2">
+                            <Button size="large" disabled={!loginForm.isValid} fullWidth type={"submit"} variant="contained">Sign in</Button>
+                        </div>
                         <Link to={"/register"}>
                             <small>Regitser</small>
                         </Link>
