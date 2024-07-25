@@ -1,6 +1,16 @@
 import {Link} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {logout} from "../../redux/features/auth/authSlice";
+import DarkMode from "../../components/DarkMode/DarkMode";
 
 function Header() {
+    const auth = useSelector(state => state.auth);
+    const dispatch  = useDispatch();
+
+    const handleLogout = () => {
+        dispatch(logout())
+    }
+
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -14,10 +24,7 @@ function Header() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#">Home</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Link</a>
+                                <Link to={"/"} className="nav-link active" aria-current="page" href="#">Home</Link>
                             </li>
                             <li className="nav-item dropdown">
                                 <Link to={"/admin/users"} className="nav-link dropdown-toggle" href="#" role="button"
@@ -29,6 +36,23 @@ function Header() {
                                     <li><Link className="dropdown-item" to={"/admin/users"}>User list</Link></li>
                                 </ul>
                             </li>
+                            <li className="nav-item dropdown">
+                                { auth.isAuthenticated && (
+                                    <>
+                                        <a className="nav-link dropdown-toggle" role="button"
+                                              data-bs-toggle="dropdown" aria-expanded="false">
+                                            Xin chao: {auth.userLogin.email}
+                                        </a>
+                                        <ul className="dropdown-menu">
+                                            <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                                        </ul>
+                                    </>
+                                )}
+                            </li>
+                            <li className="nav-item">
+                                <DarkMode/>
+                            </li>
+
                         </ul>
                         <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search"

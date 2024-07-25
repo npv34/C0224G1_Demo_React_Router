@@ -7,6 +7,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {useState} from "react";
 import {toast} from "react-toastify";
+import {useDispatch} from "react-redux";
+import {setUserLogin} from "../../redux/features/auth/authSlice";
 
 const loginSchema = Yup.object().shape({
     email: Yup.string()
@@ -20,6 +22,7 @@ function Login(props) {
 
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
 
 
     const loginForm = useFormik({
@@ -34,6 +37,13 @@ function Login(props) {
             // xu ly logic
             if (email == "admin@gmail.com" && password == "1234") {
                 // dieu huog router
+                let user = {
+                    email: email,
+                    password: password
+                }
+                // goi dispatch
+                dispatch(setUserLogin(user))
+
                 navigate("/admin/users")
             } else {
                 toast.error("Tai khoan hoac mat khau khong dung!");
