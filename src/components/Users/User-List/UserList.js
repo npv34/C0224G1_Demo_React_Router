@@ -68,12 +68,12 @@ function UserList() {
                                 <td>{user.dob}</td>
                                 <td><FormControlLabel control={<Switch checked={user.status} onChange={(e) => handleChange(user, e)} />} label={user.status ? "Active" : "Disable"} /></td>
                                 <td>
-                                    { showActions && (
+
                                         <>
                                             <Link to={`/admin/users/${user.id}/edit`} className="btn btn-primary">Edit</Link>
                                             <button onClick={() => deleteUser(user.id)} className="btn btn-danger">Delete</button>
                                         </>
-                                    )}
+
                                 </td>
                             </tr>
                         ))}
